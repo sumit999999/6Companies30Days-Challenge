@@ -1,0 +1,49 @@
+class Solution {
+
+        int dijkstra(vector<pair<int, int>> adj[], int n) {
+		int mod = 1e9 + 7;
+       
+        priority_queue<pair<long long, long long>, vector<pair<long long, long long>>, greater<pair<long long, long long>>> pq;
+        
+        vector<long long> dis(n,1e15) , path(n,0);
+        pq.push({0,0});
+        dis[0]=0 ,path[0]=1;
+
+        while(!pq.empty()){
+           long long distance=pq.top().first;
+           long long node=pq.top().second;
+           pq.pop();
+
+           for(auto it : adj[node]){
+               
+               int adjNode=it.first;
+               long long wt=it.second;
+
+               if(distance+wt<dis[adjNode]){
+                   dis[adjNode]=distance+wt;
+                   path[adjNode]=path[node];
+                   pq.push({distance+wt,adjNode});
+               }
+
+               else if(distance+wt==dis[adjNode]){
+                   path[adjNode]=(path[adjNode]+path[node])%mod;
+               }
+           }
+        }
+
+        return path[n-1];
+         
+    }
+    
+public:
+    int countPaths(int n, vector<vector<int>>& roads) {
+        vector<pair<int, int>> adj[n];
+
+        for (auto &v : roads) {
+            adj[v[0]].push_back({v[1], v[2]});
+            adj[v[1]].push_back({v[0], v[2]});
+        }
+        
+        return dijkstra(adj, n);
+    }
+};
