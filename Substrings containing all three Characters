@@ -1,0 +1,25 @@
+class Solution {
+public:
+    
+    int fx(string s ,int size , int k){
+        unordered_map<char,int> mp;
+        int i=0 , j=0 , count=0 ;
+        
+        while(j<size){
+            mp[s[j]]++;
+            while(mp.size()>k){
+                mp[s[i]]--;
+                if(mp[s[i]]==0) mp.erase(s[i]);
+                i++;
+            }
+            count+=j-i+1;
+            j++;
+        }
+        return count;
+    }
+    
+    int numberOfSubstrings(string s) {
+        int size=s.size();
+        return fx(s,size,3)-fx(s,size,2);
+    }
+};
