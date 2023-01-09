@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<int> ans;
+    int maxi=-1e9 ;
+    void helper(int idx ,int numArrows, vector<int>& aliceArrows , vector<int>& bob , int score){
+        if(idx<0 || numArrows<=0){
+           if(score>=maxi){
+               maxi=score;
+               ans=bob;
+           } 
+           return ;
+        }
+        // not take
+        helper(idx-1,numArrows,aliceArrows,bob,score);
+        // take
+        if(numArrows>aliceArrows[idx]){
+            bob[idx]=aliceArrows[idx]+1;
+            score+=idx;
+            numArrows-=(aliceArrows[idx]+1);
+            helper(idx-1,numArrows,aliceArrows,bob,score);
+            bob[idx]=0;
+        }
+    }
+    
+    vector<int> maximumBobPoints(int numArrows, vector<int>& aliceArrows) {
+        vector<int> bob(12,0);
+        helper(11,numArrows,aliceArrows,bob,0);
+        int arrows_used = 0; 
+        for(int a : ans)
+            arrows_used += a; 
+        if(arrows_used < numArrows)
+            ans[0] += (numArrows - arrows_used);
+        return ans; 
+    }
+};
