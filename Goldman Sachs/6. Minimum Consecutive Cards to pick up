@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int minimumCardPickup(vector<int>& cards) {
+        int i=0 , j=0 ;
+        int ans=1e9;
+        unordered_map<int,int> mp;
+        while(j<cards.size()){
+           mp[cards[j]]++; 
+           if(mp[cards[j]]==2){
+               ans=min(ans,j-i+1);
+           }
+           while(mp[cards[j]]==2){
+               mp[cards[i]]--;
+               i++;
+               if(mp[cards[j]]==2) ans=min(ans,j-i+1);
+           } 
+           j++;
+        }
+        if(ans==1e9) return -1;
+        return ans;
+    }
+};
