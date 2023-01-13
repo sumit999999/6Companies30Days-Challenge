@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int  ans=0;
+    pair<int,int> fx(TreeNode* root){
+        if(root==NULL) return {0,0};
+        pair<int,int> left=fx(root->left);
+        pair<int,int> right=fx(root->right);
+        int cnt=left.second+right.second+1;
+        int data=left.first+right.first+root->val;
+        if(data/cnt==root->val) ans++;
+        return {data,cnt};
+    }
+    int averageOfSubtree(TreeNode* root) {
+        fx(root);
+        return ans;
+    }
+};
