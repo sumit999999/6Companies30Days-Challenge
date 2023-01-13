@@ -1,0 +1,20 @@
+class Solution {
+public:
+    double dp[26][26][101];
+    int res=0;
+    
+    double dfs(int row , int col  , int n , int k){
+        if(row>=n || col>=n || row<0 || col<0 ) return 0;
+        if(k==0) return 1;
+        
+        if(dp[row][col][k]) return dp[row][col][k];
+
+        double sum=dfs(row-2,col+1,n,k-1)+dfs(row-2,col-1,n,k-1)+dfs(row+2,col+1,n,k-1)+dfs(row+2,col-1,n,k-1)+dfs(row-1,col-2,n,k-1)+dfs   (row-1,col+2,n,k-1)+dfs(row+1,col-2,n,k-1)+dfs(row+1,col+2,n,k-1);
+
+        return dp[row][col][k]=0.125*sum;
+    }
+    
+    double knightProbability(int n, int k, int row, int column) {
+        return dfs(row,column,n,k);
+    }
+};
