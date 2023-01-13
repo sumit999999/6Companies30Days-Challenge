@@ -1,0 +1,35 @@
+class Solution {
+public:
+
+    int fx(int i , int j , vector<vector<int>>& arr , vector<vector<int>> &dp){
+        int n=arr.size() , m=arr[0].size();
+       
+        if(i>=n || j>=m || i<0 || j<0) return 1e9;
+
+        if(dp[i][j]!=-1) return dp[i][j];
+        
+        int op1=fx(i,j+1,arr,dp);
+        int op2=fx(i+1,j,arr,dp);
+        
+        int health=min(op1,op2);
+
+        if(health==1e9) health=1;
+
+        int res=0;
+        if(health-arr[i][j]>0){
+            res=health-arr[i][j];
+        }
+        else{
+            res=1;
+        }
+
+        return dp[i][j]=res;
+
+    }
+    
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int n=dungeon.size() , m=dungeon[0].size();
+        vector<vector<int>> dp(n,vector<int>(m,-1));
+        return fx(0,0,dungeon,dp);
+    }
+};
