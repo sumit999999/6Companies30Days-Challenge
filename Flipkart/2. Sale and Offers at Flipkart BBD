@@ -1,0 +1,34 @@
+class Solution {
+public:
+    
+    int helper(vector<int>& price , vector<int>& needs){
+        int sum=0;
+        for(int i=0 ; i<price.size() ; i++){
+            sum+=(price[i]*needs[i]);
+        }
+        return sum;
+    }
+    
+    int fx(vector<int>& price, vector<vector<int>>& special, vector<int>& needs , map<vector<int>,int> &mp){
+        int n=needs.size() , i=0;
+        
+        if(mp.find(needs)!=mp.end()) return mp[needs];
+        
+        int ans=helper(price,needs);
+        for(auto it : special){
+            vector<int> clone=needs;
+            for(i=0 ; i<n ; i++){
+                clone[i]=clone[i]-it[i];
+                if(clone[i]<0) break;
+            }
+            if(i==n) ans=min(ans,it[i]+fx(price,special,clone,mp));
+        }
+        mp[needs]=ans;
+        return ans;
+    }
+    
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+        map<vector<int>,int> mp;
+        return fx(price , special,needs,mp);
+    }
+};
