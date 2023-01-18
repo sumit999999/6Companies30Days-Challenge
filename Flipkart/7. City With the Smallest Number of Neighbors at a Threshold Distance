@@ -1,0 +1,64 @@
+class Solution {
+public:
+    vector<pair<int,int>> adj[105];
+    vector<pair<int,int>> ans;
+    
+    
+    bool static cmp(const pair<int,int> p1 ,const pair<int,int> p2){
+    if(p1.first != p2.first)
+        return p1.first < p2.first;
+    
+    return p1.second > p2.second;
+    }
+  
+    void fx(int dt , int n , int i ){
+        vector<int> dis(n,1e9);
+        queue<pair<int,int>> pq;
+        pq.push({0,i});
+        dis[i]=0;
+
+        while(!pq.empty()){
+            int dist=pq.front().first;
+            int node=pq.front().second;
+            pq.pop();
+
+            for(auto it : adj[node]){
+                int d=it.second;
+                int newNode=it.first;
+
+                if(dist+d<dis[newNode]){
+                    dis[newNode]=dist+d;
+                    pq.push({dis[newNode],newNode});
+                }
+            }
+        }
+
+        int count=0;
+        for(auto it : dis){
+            if(it<=dt) count++;
+        }
+
+        ans.push_back({count,i});
+
+    }
+    
+    
+    
+    int findTheCity(int n, vector<vector<int>>& edges, int dt) {
+        
+        //vector<vector<pair<int,int>>> adj;
+        
+        for(auto it : edges){
+            adj[it[0]].push_back({it[1],it[2]});
+            adj[it[1]].push_back({it[0],it[2]});
+        }
+        
+        for(int i=0; i<n ; i++){
+            fx(dt,n,i);
+        }
+        
+        sort(ans.begin(),ans.end(),cmp);
+        return ans[0].second;
+        
+    }
+};
